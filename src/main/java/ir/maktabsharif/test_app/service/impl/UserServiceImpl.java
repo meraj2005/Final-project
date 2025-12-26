@@ -3,8 +3,8 @@ package ir.maktabsharif.test_app.service.impl;
 
 import ir.maktabsharif.test_app.dto.TokenResponse;
 import ir.maktabsharif.test_app.dto.user.*;
-import ir.maktabsharif.test_app.enums.Role;
-import ir.maktabsharif.test_app.enums.Status;
+import ir.maktabsharif.test_app.model.enums.Role;
+import ir.maktabsharif.test_app.model.enums.Status;
 import ir.maktabsharif.test_app.exceptions.BusinessException;
 import ir.maktabsharif.test_app.mapper.UserMapper;
 import ir.maktabsharif.test_app.model.User;
@@ -12,8 +12,10 @@ import ir.maktabsharif.test_app.repository.UserRepository;
 import ir.maktabsharif.test_app.security.JwtUtil;
 import ir.maktabsharif.test_app.service.UserService;
 import ir.maktabsharif.test_app.specification.UserSpecification;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -132,4 +134,5 @@ public class UserServiceImpl extends BaseServiceImpl<User, Long> implements User
         user.setStatus(Status.APPROVED);
         userRepository.save(user);
     }
+
 }

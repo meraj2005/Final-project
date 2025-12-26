@@ -1,10 +1,14 @@
 package ir.maktabsharif.test_app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -25,7 +29,7 @@ public class Course extends BaseModel<Long> {
     private LocalDateTime endTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id", nullable = false)
+    @JoinColumn(name = "teacher_id")
     private User teacher;
 
     @ManyToMany
@@ -36,7 +40,17 @@ public class Course extends BaseModel<Long> {
     )
     private Set<User> students = new HashSet<>();
 
+    @OneToMany(
+            mappedBy = "course",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JsonManagedReference
+    private List<Exam> exams = new ArrayList<>();
+
+
     public void addStudents(User user){
         this.students.add(user);
     }
+
 }

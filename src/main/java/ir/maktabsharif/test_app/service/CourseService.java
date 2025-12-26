@@ -7,6 +7,7 @@ import ir.maktabsharif.test_app.model.Course;
 import ir.maktabsharif.test_app.model.User;
 import jakarta.validation.Valid;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CourseService extends BaseService<Course, Long>{
@@ -15,4 +16,6 @@ public interface CourseService extends BaseService<Course, Long>{
     void assignTeacher(Long courseId, Long teacherId);
     void addStudent(Long courseId, Long studentId);
     CourseParticipantsResponse getParticipants(Long courseId);
+    //Part B
+    List<CourseResponse> getMyTeachingCourses();
 }

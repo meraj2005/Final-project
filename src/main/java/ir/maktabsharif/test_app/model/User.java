@@ -1,6 +1,7 @@
 package ir.maktabsharif.test_app.model;
 
-import ir.maktabsharif.test_app.enums.*;
+import ir.maktabsharif.test_app.model.enums.Role;
+import ir.maktabsharif.test_app.model.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 

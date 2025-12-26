@@ -1,7 +1,7 @@
 package ir.maktabsharif.test_app.dto.user;
 
-import ir.maktabsharif.test_app.enums.Role;
-import ir.maktabsharif.test_app.enums.Status;
+import ir.maktabsharif.test_app.model.enums.Role;
+import ir.maktabsharif.test_app.model.enums.Status;
 import lombok.Data;
 
 @Data

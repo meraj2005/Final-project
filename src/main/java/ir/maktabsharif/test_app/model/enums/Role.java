@@ -1,4 +1,4 @@
-package ir.maktabsharif.test_app.enums;
+package ir.maktabsharif.test_app.model.enums;
 
 public enum Role {
     ADMIN ,

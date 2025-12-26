@@ -10,6 +10,7 @@ import ir.maktabsharif.test_app.model.Course;
 import ir.maktabsharif.test_app.model.User;
 import ir.maktabsharif.test_app.repository.CourseRepository;
 import ir.maktabsharif.test_app.repository.UserRepository;
+import ir.maktabsharif.test_app.security.SecurityUtil;
 import ir.maktabsharif.test_app.service.CourseService;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +22,12 @@ import java.util.stream.Collectors;
 public class CourseServiceImpl extends BaseServiceImpl<Course, Long> implements CourseService {
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
-    public CourseServiceImpl(CourseRepository courseRepository, UserRepository userRepository) {
+    private final SecurityUtil securityUtil;
+    public CourseServiceImpl(CourseRepository courseRepository, UserRepository userRepository, SecurityUtil securityUtil) {
         super(courseRepository);
         this.courseRepository = courseRepository;
         this.userRepository = userRepository;
+        this.securityUtil = securityUtil;
     }
     @Override
     public Optional<Course> findByCourseCode(String courseCode) {
@@ -32,14 +35,17 @@ public class CourseServiceImpl extends BaseServiceImpl<Course, Long> implements 
     }
     @Override
     public CourseResponse create(CourseCreateRequest request) {
-        if (findByCourseCode(request.getCourseCode()).isPresent()){
-            Course course = CourseMapper.toEntity(request);
-            courseRepository.save(course);
-            return CourseMapper.toDTO(course);
-        }else {
+
+        if (findByCourseCode(request.getCourseCode()).isPresent()) {
             throw new BusinessException("This course code has already been used.");
         }
+
+        Course course = CourseMapper.toEntity(request);
+        course.setTeacher(userRepository.findById(request.getTeacherId()).orElseThrow());
+        courseRepository.save(course);
+        return CourseMapper.toDTO(course);
     }
+
     @Override
     public void assignTeacher(Long courseId, Long teacherId) {
         Course course = courseRepository.findById(courseId)
@@ -70,5 +76,16 @@ public class CourseServiceImpl extends BaseServiceImpl<Course, Long> implements 
         response.setStudents(course.getStudents().stream().map(UserMapper::toDTO).collect(Collectors.toSet()));
         response.setTeacher(UserMapper.toDTO(course.getTeacher()));
         return response;
+    }
+
+
+    @Override
+    public List<CourseResponse> getMyTeachingCourses() {
+        User teacher = securityUtil.getCurrentUser();
+
+        return courseRepository.findByTeacher(teacher)
+                .stream()
+                .map(CourseMapper::toDTO)
+                .toList();
     }
 }

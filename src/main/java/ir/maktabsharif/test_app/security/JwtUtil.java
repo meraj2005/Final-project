@@ -19,7 +19,7 @@ public class JwtUtil {
     private static final String SECRET =
             "maktabsharif-jwt-secret-key-which-must-be-at-least-32-bytes";
 
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 24 ساعت
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;
 
     private final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
@@ -57,7 +57,7 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
 
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
 
         return Jwts.parserBuilder()
                 .setSigningKey(key)
